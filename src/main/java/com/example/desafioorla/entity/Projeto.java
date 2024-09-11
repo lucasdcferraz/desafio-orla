@@ -22,7 +22,6 @@ public class Projeto {
     @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Funcionario> funcionarios = new HashSet<>();
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }
