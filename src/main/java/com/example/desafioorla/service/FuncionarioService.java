@@ -14,16 +14,16 @@ public class FuncionarioService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    public Funcionario saveFuncionario(Funcionario funcionario) {
-        return funcionarioRepository.save(funcionario);
-    }
-
     public List<Funcionario> getAllFuncionarios() {
         return funcionarioRepository.findAll();
     }
 
     public Optional<Funcionario> getFuncionarioById(Long id) {
         return funcionarioRepository.findById(id);
+    }
+
+    public Funcionario saveFuncionario(Funcionario funcionario) {
+        return funcionarioRepository.save(funcionario);
     }
 
     public void deleteFuncionario(Long id) {

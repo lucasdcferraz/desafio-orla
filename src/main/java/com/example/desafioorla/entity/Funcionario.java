@@ -1,7 +1,11 @@
 package com.example.desafioorla.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "funcionarios")
@@ -14,18 +18,23 @@ public class Funcionario {
     @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String cpf;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
     private BigDecimal salario;
 
-    @ManyToOne
-    @JoinColumn(name = "projeto_id")
-    private Projeto projeto;
+    @ManyToMany
+    @JoinTable(
+            name = "funcionario_projeto",
+            joinColumns = @JoinColumn(name = "funcionario_id"),
+            inverseJoinColumns = @JoinColumn(name = "projeto_id")
+    )
+    @JsonIgnoreProperties("funcionarios")
+    private Set<Projeto> projetos = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -67,11 +76,11 @@ public class Funcionario {
         this.salario = salario;
     }
 
-    public Projeto getProjeto() {
-        return projeto;
+    public Set<Projeto> getProjetos() {
+        return projetos;
     }
 
-    public void setProjeto(Projeto projeto) {
-        this.projeto = projeto;
+    public void setProjetos(Set<Projeto> projetos) {
+        this.projetos = projetos;
     }
 }

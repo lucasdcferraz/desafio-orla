@@ -1,5 +1,7 @@
 package com.example.desafioorla.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -16,10 +18,11 @@ public class Projeto {
     @Column(nullable = false)
     private String nome;
 
-    @Column(name = "data_criacao", nullable = false)
+    @Column(nullable = false)
     private LocalDate dataCriacao;
 
-    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "projetos")
+    @JsonIgnoreProperties("projetos")
     private Set<Funcionario> funcionarios = new HashSet<>();
 
     public Long getId() {

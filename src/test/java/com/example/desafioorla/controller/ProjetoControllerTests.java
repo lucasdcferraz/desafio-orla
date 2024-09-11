@@ -9,11 +9,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(ProjetoController.class)
 public class ProjetoControllerTests {
@@ -28,14 +27,15 @@ public class ProjetoControllerTests {
     public void criarProjeto() throws Exception {
         Projeto projeto = new Projeto();
         projeto.setNome("Novo Projeto Teste");
-        projeto.setDataCriacao(LocalDate.now());
+        projeto.setDataCriacao(LocalDate.parse("2024-09-11"));
 
         Mockito.when(projetoService.saveProjeto(Mockito.any(Projeto.class))).thenReturn(projeto);
 
-        mockMvc.perform(post("/projetos")
+        mockMvc.perform(MockMvcRequestBuilders.post("/projetos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nome\": \"Novo Projeto Teste\", \"dataCriacao\": \"2024-09-11\"}"))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("Novo Projeto Teste"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("Novo Projeto Teste"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dataCriacao").value("2024-09-11"));
     }
 }

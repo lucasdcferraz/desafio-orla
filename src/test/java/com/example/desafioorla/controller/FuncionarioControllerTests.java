@@ -2,6 +2,7 @@ package com.example.desafioorla.controller;
 
 import com.example.desafioorla.entity.Funcionario;
 import com.example.desafioorla.service.FuncionarioService;
+import com.example.desafioorla.service.ProjetoService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class FuncionarioControllerTests {
     @MockBean
     private FuncionarioService funcionarioService;
 
+    @MockBean
+    private ProjetoService projetoService;
+
     @Test
     public void criarFuncionario() throws Exception {
         Funcionario funcionario = new Funcionario();
@@ -37,6 +41,9 @@ public class FuncionarioControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nome\": \"Funcionario Teste\", \"cpf\": \"12345678901\", \"email\": \"funcionario@teste.com\", \"salario\": 1500.00}"))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("Funcionario Teste"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("Funcionario Teste"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value("12345678901"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("funcionario@teste.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salario").value(1500.00));
     }
 }

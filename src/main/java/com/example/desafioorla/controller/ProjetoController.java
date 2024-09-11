@@ -20,7 +20,7 @@ public class ProjetoController {
     @PostMapping
     public ResponseEntity<Projeto> createProjeto(@RequestBody Projeto projeto) {
         Projeto savedProjeto = projetoService.saveProjeto(projeto);
-        return new ResponseEntity<>(savedProjeto, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedProjeto);
     }
 
     @GetMapping
@@ -32,6 +32,18 @@ public class ProjetoController {
     public ResponseEntity<Projeto> getProjetoById(@PathVariable Long id) {
         Optional<Projeto> projeto = projetoService.getProjetoById(id);
         return projeto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Projeto> updateProjeto(@PathVariable Long id, @RequestBody Projeto projeto) {
+        Optional<Projeto> existingProjeto = projetoService.getProjetoById(id);
+        if (!existingProjeto.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        projeto.setId(id);
+        Projeto updatedProjeto = projetoService.saveProjeto(projeto);
+        return ResponseEntity.ok(updatedProjeto);
     }
 
     @DeleteMapping("/{id}")
