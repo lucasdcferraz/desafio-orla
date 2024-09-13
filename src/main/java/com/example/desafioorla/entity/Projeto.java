@@ -25,7 +25,12 @@ public class Projeto {
     @NotNull(message = "Data de criação não pode ser nula")
     private LocalDate dataCriacao;
 
-    @ManyToMany(mappedBy = "projetos")
+    @ManyToMany
+    @JoinTable(
+            name = "funcionario_projeto",
+            joinColumns = @JoinColumn(name = "projeto_id"),
+            inverseJoinColumns = @JoinColumn(name = "funcionario_id")
+    )
     @JsonIgnoreProperties("projetos")
     private Set<Funcionario> funcionarios = new HashSet<>();
 

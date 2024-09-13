@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/projetos")
@@ -73,13 +75,27 @@ public class ProjetoController {
             @PathVariable Long id,
             @Valid @RequestBody Projeto projeto) {
 
-        Optional<Projeto> existingProjeto = projetoService.getProjetoById(id);
-        if (!existingProjeto.isPresent()) {
+        Optional<Projeto> existingProjetoOpt = projetoService.getProjetoById(id);
+        if (!existingProjetoOpt.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
-        projeto.setId(id);
-        Projeto updatedProjeto = projetoService.saveProjeto(projeto);
+        Projeto existingProjeto = existingProjetoOpt.get();
+
+        existingProjeto.setNome(projeto.getNome());
+        existingProjeto.setDataCriacao(projeto.getDataCriacao());
+
+        Set<Funcionario> updatedFuncionarios = projeto.getFuncionarios().stream()
+                .map(funcionarioDTO -> {
+                    Optional<Funcionario> funcionarioOpt = funcionarioService.getFuncionarioById(funcionarioDTO.getId());
+                    return funcionarioOpt.orElse(null);
+                })
+                .filter(funcionario -> funcionario != null)
+                .collect(Collectors.toSet());
+
+        existingProjeto.setFuncionarios(updatedFuncionarios);
+
+        Projeto updatedProjeto = projetoService.saveProjeto(existingProjeto);
         return ResponseEntity.ok(updatedProjeto);
     }
 
