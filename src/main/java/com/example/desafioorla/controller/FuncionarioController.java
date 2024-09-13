@@ -7,13 +7,16 @@ import com.example.desafioorla.service.ProjetoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/funcionarios")
+@Validated
 public class FuncionarioController {
 
     @Autowired
@@ -23,16 +26,23 @@ public class FuncionarioController {
     private ProjetoService projetoService;
 
     @PostMapping("/{funcionarioId}/projetos/{projetoId}")
-    public ResponseEntity<Funcionario> addProjetoToFuncionario(@PathVariable Long funcionarioId, @PathVariable Long projetoId) {
-        Optional<Funcionario> funcionario = funcionarioService.getFuncionarioById(funcionarioId);
-        Optional<Projeto> projeto = projetoService.getProjetoById(projetoId);
+    public ResponseEntity<Funcionario> addProjetoToFuncionario(
+            @PathVariable Long funcionarioId,
+            @PathVariable Long projetoId) {
 
-        if (!funcionario.isPresent() || !projeto.isPresent()) {
+        Optional<Funcionario> funcionarioOpt = funcionarioService.getFuncionarioById(funcionarioId);
+        Optional<Projeto> projetoOpt = projetoService.getProjetoById(projetoId);
+
+        if (funcionarioOpt.isEmpty() || projetoOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        Funcionario funcionarioToUpdate = funcionario.get();
-        Projeto projetoToAdd = projeto.get();
+        Funcionario funcionarioToUpdate = funcionarioOpt.get();
+        Projeto projetoToAdd = projetoOpt.get();
+
+        if (funcionarioToUpdate.getProjetos().contains(projetoToAdd)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
 
         funcionarioToUpdate.getProjetos().add(projetoToAdd);
         Funcionario updatedFuncionario = funcionarioService.saveFuncionario(funcionarioToUpdate);
@@ -41,8 +51,9 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public List<Funcionario> getAllFuncionarios() {
-        return funcionarioService.getAllFuncionarios();
+    public ResponseEntity<List<Funcionario>> getAllFuncionarios() {
+        List<Funcionario> funcionarios = funcionarioService.getAllFuncionarios();
+        return ResponseEntity.ok(funcionarios);
     }
 
     @GetMapping("/{id}")
@@ -52,13 +63,16 @@ public class FuncionarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Funcionario> createFuncionario(@RequestBody Funcionario funcionario) {
+    public ResponseEntity<Funcionario> createFuncionario(@Valid @RequestBody Funcionario funcionario) {
         Funcionario savedFuncionario = funcionarioService.saveFuncionario(funcionario);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFuncionario);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> updateFuncionario(@PathVariable Long id, @RequestBody Funcionario funcionario) {
+    public ResponseEntity<Funcionario> updateFuncionario(
+            @PathVariable Long id,
+            @Valid @RequestBody Funcionario funcionario) {
+
         Optional<Funcionario> existingFuncionario = funcionarioService.getFuncionarioById(id);
         if (!existingFuncionario.isPresent()) {
             return ResponseEntity.notFound().build();
@@ -71,6 +85,11 @@ public class FuncionarioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFuncionario(@PathVariable Long id) {
+        Optional<Funcionario> funcionario = funcionarioService.getFuncionarioById(id);
+        if (!funcionario.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
         funcionarioService.deleteFuncionario(id);
         return ResponseEntity.noContent().build();
     }

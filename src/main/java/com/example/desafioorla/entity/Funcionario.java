@@ -3,6 +3,9 @@ package com.example.desafioorla.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,15 +19,20 @@ public class Funcionario {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Nome não pode ser vazio")
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "CPF não pode ser vazio")
     private String cpf;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
+    @Email(message = "Email deve ser válido")
+    @NotBlank(message = "Email não pode ser vazio")
     private String email;
 
     @Column(nullable = false)
+    @NotNull(message = "Salário não pode ser nulo")
     private BigDecimal salario;
 
     @ManyToMany

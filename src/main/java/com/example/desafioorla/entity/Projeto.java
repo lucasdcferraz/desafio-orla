@@ -3,6 +3,8 @@ package com.example.desafioorla.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,9 +18,11 @@ public class Projeto {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Nome do projeto não pode ser vazio")
     private String nome;
 
     @Column(nullable = false)
+    @NotNull(message = "Data de criação não pode ser nula")
     private LocalDate dataCriacao;
 
     @ManyToMany(mappedBy = "projetos")
