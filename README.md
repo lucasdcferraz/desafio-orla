@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Esta API RESTful permite a gestão de projetos e funcionários, com operações de criação, leitura, atualização e exclusão de dados, além de permitir associar funcionários a projetos e vice-versa.
+Esta API RESTful permite a gestão de projetos e funcionários, com operações de criação, leitura, atualização e exclusão de dados, além de associar funcionários a projetos e vice-versa.
 
 ## Tecnologias Utilizadas
 
@@ -36,7 +36,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Criar Projeto
 - **Método:** POST
-- **URL:** /projetos
+- **URL:** `/projetos`
 - **Descrição:** Cria um novo projeto.
 - **Corpo da Requisição:**
     ```json
@@ -57,7 +57,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Listar Projetos
 - **Método:** GET
-- **URL:** /projetos
+- **URL:** `/projetos`
 - **Descrição:** Lista todos os projetos.
 - **Resposta:**
     ```json
@@ -109,7 +109,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Obter Projeto por ID
 - **Método:** GET
-- **URL:** /projetos/{id}
+- **URL:** `/projetos/{id}`
 - **Descrição:** Obtém um projeto específico pelo ID.
 - **Resposta:**
     ```json
@@ -131,7 +131,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Atualizar Projeto
 - **Método:** PUT
-- **URL:** /projetos/{id}
+- **URL:** `/projetos/{id}`
 - **Descrição:** Atualiza um projeto específico pelo ID.
 - **Corpo da Requisição:**
     ```json
@@ -152,7 +152,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Deletar Projeto
 - **Método:** DELETE
-- **URL:** /projetos/{id}
+- **URL:** `/projetos/{id}`
 - **Descrição:** Deleta um projeto específico pelo ID.
 - **Resposta:** Status 204 No Content
 
@@ -160,7 +160,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Criar Funcionário
 - **Método:** POST
-- **URL:** /funcionarios
+- **URL:** `/funcionarios`
 - **Descrição:** Cria um novo funcionário.
 - **Corpo da Requisição:**
     ```json
@@ -184,7 +184,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Listar Funcionários
 - **Método:** GET
-- **URL:** /funcionarios
+- **URL:** `/funcionarios`
 - **Descrição:** Lista todos os funcionários.
 - **Resposta:**
     ```json
@@ -227,7 +227,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Obter Funcionário por ID
 - **Método:** GET
-- **URL:** /funcionarios/{id}
+- **URL:** `/funcionarios/{id}`
 - **Descrição:** Obtém um funcionário específico pelo ID.
 - **Resposta:**
     ```json
@@ -254,7 +254,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Atualizar Funcionário
 - **Método:** PUT
-- **URL:** /funcionarios/{id}
+- **URL:** `/funcionarios/{id}`
 - **Descrição:** Atualiza um funcionário específico pelo ID.
 - **Corpo da Requisição:**
     ```json
@@ -278,7 +278,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Deletar Funcionário
 - **Método:** DELETE
-- **URL:** /funcionarios/{id}
+- **URL:** `/funcionarios/{id}`
 - **Descrição:** Deleta um funcionário específico pelo ID.
 - **Resposta:** Status 204 No Content
 
@@ -286,7 +286,7 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 
 #### Adicionar um Projeto a um Funcionário
 - **Método:** POST
-- **URL:** /funcionarios/{funcionarioId}/projetos/{projetoId}
+- **URL:** `/funcionarios/{funcionarioId}/projetos/{projetoId}`
 - **Descrição:** Adiciona um projeto a um funcionário.
 - **Resposta Exemplo:**
     ```json
@@ -295,13 +295,35 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
       "nome": "Funcionario 4",
       "cpf": "123.456.789-00",
       "email": "funcionario@teste.com",
-      "salario": 3000.00,
+      "salario": 3200.00,
       "projetos": [
+        {
+          "id": 1,
+          "nome": "Projeto 1",
+          "dataCriacao": "2024-09-10"
+        },
         {
           "id": 2,
           "nome": "Projeto 2",
           "dataCriacao": "2024-09-11"
-        },
+        }
+      ]
+    }
+    ```
+
+#### Remover um Projeto de um Funcionário
+- **Método:** DELETE
+- **URL:** `/funcionarios/{funcionarioId}/projetos/{projetoId}`
+- **Descrição:** Remove um projeto de um funcionário.
+- **Resposta Exemplo:**
+    ```json
+    {
+      "id": 1,
+      "nome": "Funcionario 4",
+      "cpf": "123.456.789-00",
+      "email": "funcionario@teste.com",
+      "salario": 3200.00,
+      "projetos": [
         {
           "id": 1,
           "nome": "Projeto 1",
@@ -311,46 +333,37 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
     }
     ```
 
-#### Adicionar um Funcionário a um Projeto
-- **Método:** POST
-- **URL:** /projetos/{projetoId}/funcionarios/{funcionarioId}
-- **Descrição:** Adiciona um funcionário a um projeto.
-- **Resposta Exemplo:**
-    ```json
-    {
-      "id": 2,
-      "nome": "Projeto 4",
-      "dataCriacao": "2024-09-11",
-      "funcionarios": [
-        {
-          "id": 1,
-          "nome": "Funcionário 3",
-          "cpf": "123.456.789-00",
-          "email": "funcionario@teste.com",
-          "salario": 3000.00
-        }
-      ]
-    }
+## Testes
+
+Os testes foram implementados para garantir a funcionalidade correta da API. Eles cobrem:
+
+- Validação de criação, atualização e exclusão de projetos e funcionários.
+- Verificação dos relacionamentos entre projetos e funcionários.
+- Garantia da integridade dos dados e conformidade com os requisitos da API.
+
+## Instruções para Executar o Projeto
+
+1. **Clone o repositório:**
+    ```bash
+    git clone https://github.com/seu-usuario/desafio-orla.git
     ```
 
-## Instalação e Execução
-
-Para executar este projeto localmente, siga os passos abaixo:
-
-1. Clone o repositório:
+2. **Navegue até o diretório do projeto:**
     ```bash
-    git clone https://github.com/lucasdcferraz/desafio-orla.git
     cd desafio-orla
     ```
 
-2. Compile e empacote o aplicativo usando Gradle:
+3. **Compile e execute o projeto:**
     ```bash
-    ./gradlew build
+    ./mvnw spring-boot:run
     ```
 
-3. Execute o aplicativo:
+4. **Acesse a API:** 
+   - URL base: `http://localhost:8080`
+
+5. **Para rodar os testes:** 
     ```bash
-    ./gradlew bootRun
+    ./mvnw test
     ```
 
 O servidor deverá estar rodando em [http://localhost:8080](http://localhost:8080).
