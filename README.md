@@ -343,19 +343,20 @@ Os testes foram implementados para garantir a funcionalidade correta da API. Ele
 
 ## Instruções para Executar o Projeto
 
-1. **Clone o repositório:**
+1. Clone o repositório:
     ```bash
-    git clone https://github.com/seu-usuario/desafio-orla.git
-    ```
-
-2. **Navegue até o diretório do projeto:**
-    ```bash
+    git clone https://github.com/lucasdcferraz/desafio-orla.git
     cd desafio-orla
     ```
 
-3. **Compile e execute o projeto:**
+2. Compile e empacote o aplicativo usando Gradle:
     ```bash
-    ./mvnw spring-boot:run
+    ./gradlew build
+    ```
+
+3. Execute o aplicativo:
+    ```bash
+    ./gradlew bootRun
     ```
 
 4. **Acesse a API:** 
@@ -363,13 +364,9 @@ Os testes foram implementados para garantir a funcionalidade correta da API. Ele
 
 5. **Para rodar os testes:** 
     ```bash
-    ./mvnw test
+   ./gradlew test
     ```
 
+Para executar este projeto localmente, siga os passos abaixo:
+
 O servidor deverá estar rodando em [http://localhost:8080](http://localhost:8080).
-
-## Testes
-
-Para rodar os testes, utilize o comando:
-```bash
-./gradlew test
