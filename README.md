@@ -129,24 +129,37 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
     }
     ```
 
-#### Atualizar Projeto
+### Atualizar Projeto e Adicionar Funcionário
+
 - **Método:** PUT
 - **URL:** `/projetos/{id}`
-- **Descrição:** Atualiza um projeto específico pelo ID.
+- **Descrição:** Atualiza um projeto específico pelo ID e permite associar um ou mais funcionários ao projeto.
 - **Corpo da Requisição:**
     ```json
-    {
-      "nome": "Novo Nome do Projeto",
-      "dataCriacao": "YYYY-MM-DD"
+    { 
+        "id": 1,
+        "nome": "Projeto 1",
+        "dataCriacao": "2024-09-10",
+        "funcionarios": [
+            {"id": 1 }  // id do funcionário a ser adicionado
+        ]
     }
     ```
 - **Resposta:**
     ```json
     {
       "id": 1,
-      "nome": "Novo Nome do Projeto",
-      "dataCriacao": "YYYY-MM-DD",
-      "funcionarios": []
+      "nome": "Projeto 1",
+      "dataCriacao": "2024-09-10",
+      "funcionarios": [
+        {
+          "id": 1,
+          "nome": "Funcionário Adicionado",
+          "cpf": "123.456.789-00",
+          "email": "funcionario@exemplo.com",
+          "salario": 3000.00
+        }
+      ]
     }
     ```
 
@@ -252,27 +265,39 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
     }
     ```
 
-#### Atualizar Funcionário
+### Atualizar Funcionário e Adicionar Projeto
+
 - **Método:** PUT
 - **URL:** `/funcionarios/{id}`
-- **Descrição:** Atualiza um funcionário específico pelo ID.
+- **Descrição:** Atualiza um funcionário específico pelo ID e permite associar um ou mais projetos ao funcionário.
 - **Corpo da Requisição:**
     ```json
     {
-      "nome": "Nome Atualizado",
-      "cpf": "12345678901",
-      "email": "email@exemplo.com",
-      "salario": 3200.00
+        "id": 1,
+        "nome": "Funcionario 1",
+        "cpf": "123.456.789-00",
+        "email": "funcionario@teste.com",
+        "salario": 3000.00,
+        "projetos": [
+            {"id": 1 }  // id do projeto a ser adicionado
+        ]
     }
     ```
 - **Resposta:**
     ```json
     {
       "id": 1,
-      "nome": "Nome Atualizado",
-      "cpf": "12345678901",
-      "email": "email@exemplo.com",
-      "salario": 3200.00
+      "nome": "Funcionario 1",
+      "cpf": "123.456.789-00",
+      "email": "funcionario@teste.com",
+      "salario": 3000.00,
+      "projetos": [
+        {
+          "id": 1,
+          "nome": "Projeto 1",
+          "dataCriacao": "2024-09-10"
+        }
+      ]
     }
     ```
 
@@ -281,65 +306,6 @@ Esta API RESTful permite a gestão de projetos e funcionários, com operações 
 - **URL:** `/funcionarios/{id}`
 - **Descrição:** Deleta um funcionário específico pelo ID.
 - **Resposta:** Status 204 No Content
-
-### Relacionar Funcionários e Projetos
-
-#### Adicionar um Projeto a um Funcionário
-- **Método:** POST
-- **URL:** `/funcionarios/{funcionarioId}/projetos/{projetoId}`
-- **Descrição:** Adiciona um projeto a um funcionário.
-- **Resposta Exemplo:**
-    ```json
-    {
-      "id": 1,
-      "nome": "Funcionario 4",
-      "cpf": "123.456.789-00",
-      "email": "funcionario@teste.com",
-      "salario": 3200.00,
-      "projetos": [
-        {
-          "id": 1,
-          "nome": "Projeto 1",
-          "dataCriacao": "2024-09-10"
-        },
-        {
-          "id": 2,
-          "nome": "Projeto 2",
-          "dataCriacao": "2024-09-11"
-        }
-      ]
-    }
-    ```
-
-#### Remover um Projeto de um Funcionário
-- **Método:** DELETE
-- **URL:** `/funcionarios/{funcionarioId}/projetos/{projetoId}`
-- **Descrição:** Remove um projeto de um funcionário.
-- **Resposta Exemplo:**
-    ```json
-    {
-      "id": 1,
-      "nome": "Funcionario 4",
-      "cpf": "123.456.789-00",
-      "email": "funcionario@teste.com",
-      "salario": 3200.00,
-      "projetos": [
-        {
-          "id": 1,
-          "nome": "Projeto 1",
-          "dataCriacao": "2024-09-10"
-        }
-      ]
-    }
-    ```
-
-## Testes
-
-Os testes foram implementados para garantir a funcionalidade correta da API. Eles cobrem:
-
-- Validação de criação, atualização e exclusão de projetos e funcionários.
-- Verificação dos relacionamentos entre projetos e funcionários.
-- Garantia da integridade dos dados e conformidade com os requisitos da API.
 
 ## Instruções para Executar o Projeto
 
@@ -361,12 +327,16 @@ Os testes foram implementados para garantir a funcionalidade correta da API. Ele
 
 4. **Acesse a API:** 
    - URL base: `http://localhost:8080`
+  
+## Testes
 
-5. **Para rodar os testes:** 
+Os testes foram implementados para garantir a funcionalidade correta da API. Eles cobrem:
+
+- Validação de criação, atualização e exclusão de projetos e funcionários.
+- Verificação dos relacionamentos entre projetos e funcionários.
+- Garantia da integridade dos dados e conformidade com os requisitos da API.
+
+**Para rodar os testes:** 
     ```bash
    ./gradlew test
     ```
-
-Para executar este projeto localmente, siga os passos abaixo:
-
-O servidor deverá estar rodando em [http://localhost:8080](http://localhost:8080).
